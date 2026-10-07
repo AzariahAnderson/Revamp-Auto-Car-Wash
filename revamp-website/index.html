@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<!-- ==========================================================================
+  REVAMP AUTO CAR WASH — starting point / design reference implementation.
+  BEFORE EDITING ANYTHING: read DESIGN.md in this folder. It holds the tokens,
+  type scale, motion spec, imagery rules and the placeholder inventory.
+  Address & phone are real and baked in; remaining placeholders are
+  [OPENING HOURS], [YOUR EMAIL] and [YOUR INSTAGRAM] — search for "[" to find them.
+=========================================================================== -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Revamp Auto Car Wash — Clean cars hit different.</title>
+  <meta name="description" content="Hand car wash & detail studio. Half House from R40–R90, Full House from R80–R150. Standard sedans R65 / R120. Walk-ins welcome." />
+  <meta name="theme-color" content="#0B0B0C" />
+
+  <!-- Icons & manifest -->
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg" />
+  <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16x16.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png" />
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png" />
+  <link rel="manifest" href="site.webmanifest" />
+
+  <!-- Social -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Revamp Auto Car Wash — Clean cars hit different." />
+  <meta property="og:description" content="Two washes, done properly. Half House from R40–R90, Full House from R80–R150." />
+  <meta property="og:image" content="assets/img/og-cover.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Revamp Auto Car Wash" />
+  <meta name="twitter:description" content="Two washes, done properly. Clean cars hit different." />
+  <meta name="twitter:image" content="assets/img/og-cover.jpg" />
+
+  <!-- Self-hosted type: Inter (body) + Inter Tight (display). No CDN. -->
+  <link rel="preload" href="assets/fonts/InterVariable.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/InterTight-Variable.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AutoWash",
+    "name": "Revamp Auto Car Wash",
+    "slogan": "Clean cars hit different.",
+    "priceRange": "R40 - R150",
+    "telephone": "+27 76 302 6570",
+    "image": "assets/img/og-cover.jpg",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "89 Stormberg Avenue",
+      "addressLocality": "Bosmont, Johannesburg",
+      "addressRegion": "Gauteng",
+      "addressCountry": "ZA"
+    }
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- Crown mark — the one true geometry (see DESIGN.md §Mark) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="crown" viewBox="0 0 64 64">
+      <polygon fill="currentColor" points="14,45 8,17 22,29 32,7 42,29 56,17 50,45"/>
+      <rect fill="currentColor" x="12" y="50" width="40" height="6" rx="1"/>
+    </symbol>
+    <symbol id="arrow" viewBox="0 0 16 16">
+      <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M2 8h11M9 3.5 13.5 8 9 12.5"/>
+    </symbol>
+  </svg>
+
+  <!-- ================= Header ================= -->
+  <header class="header">
+    <div class="container header__inner">
+      <a class="logo" href="#top" aria-label="Revamp Auto Car Wash — home">
+        <svg aria-hidden="true" style="color:var(--gold)"><use href="#crown"/></svg>
+        <span class="logo__text">
+          <span class="logo__name">REVAMP</span>
+          <span class="logo__sub">Auto Car Wash</span>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="#services">Services</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#process">Process</a>
+        <a href="#visit">Visit</a>
+        <a class="btn btn--gold" href="tel:+27763026570">Book a wash</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ================= Hero ================= -->
+    <section class="hero" id="top">
+      <div class="hero__media" aria-hidden="true">
+        <img src="assets/img/hero-banner.jpg" alt="" fetchpriority="high" />
+        <div class="hero__scrim"></div>
+      </div>
+      <div class="container hero__content">
+        <p class="eyebrow"><svg aria-hidden="true"><use href="#crown"/></svg>Hand car wash &amp; detail studio</p>
+        <h1>
+          <span class="line"><span>Clean cars</span></span>
+          <span class="line"><span>hit <em>different.</em></span></span>
+        </h1>
+        <p class="lead">Two washes on the menu — a Half House for the outside, a Full House for in and out. Both by hand, both properly, both while you wait.</p>
+        <div class="hero__actions">
+          <a class="btn btn--gold" href="tel:+27763026570">Book a wash</a>
+          <a class="btn btn--ghost" href="#pricing">See the prices</a>
+        </div>
+      </div>
+      <ul class="container hero__meta">
+        <li>Walk-ins welcome</li>
+        <li>Sedans to bakkies</li>
+        <li>Hand dry, always</li>
+      </ul>
+    </section>
+
+    <!-- ================= Marquee ================= -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track">
+        <div class="marquee__group">
+          <span>Half House</span><svg style="color:var(--ink)"><use href="#crown"/></svg>
+          <span>Full House</span><svg style="color:var(--ink)"><use href="#crown"/></svg>
+          <span>Hand wash</span><svg style="color:var(--ink)"><use href="#crown"/></svg>
+          <span>No swirl marks</span><svg style="color:var(--ink)"><use href="#crown"/></svg>
+          <span>Walk-ins welcome</span><svg style="color:var(--ink)"><use href="#crown"/></svg>
+          <span>Sedans to bakkies</span><svg style="color:var(--ink)"><use href="#crown"/></svg>
+        </div>
+        <div class="marquee__group">
+          <span>Half House</span><svg style="color:var(--ink)"><use href="#crown"/></svg>
+          <span>Full House</span><svg style="color:var(--ink)"><use href="#crown"/></svg>
+          <span>Hand wash</span><svg style="color:var(--ink)"><use href="#crown"/></svg>
+          <span>No swirl marks</span><svg style="color:var(--ink)"><use href="#crown"/></svg>
+          <span>Walk-ins welcome</span><svg style="color:var(--ink)"><use href="#crown"/></svg>
+          <span>Sedans to bakkies</span><svg style="color:var(--ink)"><use href="#crown"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= Services ================= -->
+    <section class="section" id="services">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div>
+            <p class="eyebrow"><svg aria-hidden="true"><use href="#crown"/></svg>The menu</p>
+            <h2 class="h2">Choose your wash.</h2>
+          </div>
+          <p class="lead">Two washes. That&rsquo;s the whole menu &mdash; so both get done properly, every time.</p>
+        </div>
+
+        <div class="cards">
+          <article class="card" data-reveal>
+            <div class="card__media">
+              <img src="assets/img/service-half-house.jpg" alt="A black coupe being rinsed by hand in the Revamp studio — exterior wash only" loading="lazy" />
+              <span class="card__tag">Exterior</span>
+            </div>
+            <div class="card__body">
+              <div class="card__top">
+                <h3>Half House</h3>
+                <p class="card__price">R40 &ndash; R90</p>
+              </div>
+              <p class="card__sedan">Standard sedan <strong>R65</strong></p>
+              <p class="card__desc">A proper outside wash. Rinse, hand wash, hand dry &mdash; in and out before your first song ends.</p>
+              <ul class="card__feat">
+                <li>pH-neutral foam &amp; clean mitts, panel by panel</li>
+                <li>Wheels, arches &amp; sills rinsed out</li>
+                <li>Plush-towel hand dry &mdash; no swirl marks</li>
+              </ul>
+              <p class="card__foot"><a class="tlink" href="#visit">Book a Half House <svg aria-hidden="true"><use href="#arrow"/></svg></a></p>
+            </div>
+          </article>
+
+          <article class="card" data-reveal style="--d:.12s">
+            <div class="card__media">
+              <img src="assets/img/service-full-house.jpg" alt="The same coupe covered in snow foam with the door open to a clean, lit cabin — full interior and exterior wash" loading="lazy" />
+              <span class="card__tag">Exterior + Interior</span>
+            </div>
+            <div class="card__body">
+              <div class="card__top">
+                <h3>Full House</h3>
+                <p class="card__price">R80 &ndash; R150</p>
+              </div>
+              <p class="card__sedan">Standard sedan <strong>R120</strong></p>
+              <p class="card__desc">The whole car, inside and out. Everything in the Half House, plus a cabin that feels factory-fresh.</p>
+              <ul class="card__feat">
+                <li>Everything in the Half House</li>
+                <li>Full interior vacuum &mdash; boot &amp; bins included</li>
+                <li>Dash, console &amp; door cards wiped down</li>
+                <li>Glass cleaned inside &amp; out</li>
+              </ul>
+              <p class="card__foot"><a class="tlink" href="#visit">Book a Full House <svg aria-hidden="true"><use href="#arrow"/></svg></a></p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Pricing ================= -->
+    <section class="section pricing" id="pricing">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div>
+            <p class="eyebrow eyebrow--dark"><svg aria-hidden="true"><use href="#crown"/></svg>Pricing</p>
+            <h2 class="h2">Straight prices. No surprises.</h2>
+          </div>
+        </div>
+
+        <div class="price-rows" data-reveal>
+          <div class="price-row">
+            <h3>Half House</h3>
+            <p>Basic exterior wash (wash &amp; dry)</p>
+            <p class="amount">R40 &ndash; R90</p>
+          </div>
+          <div class="price-row">
+            <h3>Full House</h3>
+            <p>Exterior wash plus interior vacuum</p>
+            <p class="amount">R80 &ndash; R150</p>
+          </div>
+          <div class="price-row">
+            <h3>Bigger vehicles</h3>
+            <p>SUVs, bakkies and other larger vehicles usually add a surcharge</p>
+            <p class="amount">+ R10 &ndash; R50</p>
+          </div>
+        </div>
+
+        <p class="price-note" data-reveal>
+          <span class="chip">Standard sedan &mdash; Half House <strong>R65</strong></span>
+          <span class="chip">Standard sedan &mdash; Full House <strong>R120</strong></span>
+          Prices above are for standard sedans. Final price depends on size and condition &mdash; we quote before we start, always.
+        </p>
+      </div>
+    </section>
+
+    <!-- ================= Process ================= -->
+    <section class="section" id="process">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div>
+            <p class="eyebrow"><svg aria-hidden="true"><use href="#crown"/></svg>How it goes</p>
+            <h2 class="h2">Four steps. Every car.</h2>
+          </div>
+          <p class="lead">The method is the product. Short version:</p>
+        </div>
+        <div class="steps">
+          <div class="step" data-reveal>
+            <span class="step__num">01</span>
+            <h3>Rinse first</h3>
+            <p>Loose grit goes before anything touches the paint. Scratch-free is the whole point.</p>
+          </div>
+          <div class="step" data-reveal style="--d:.1s">
+            <span class="step__num">02</span>
+            <h3>Foam &amp; hand wash</h3>
+            <p>pH-neutral snow foam, clean mitts, panel by panel. Roof to sills.</p>
+          </div>
+          <div class="step" data-reveal style="--d:.2s">
+            <span class="step__num">03</span>
+            <h3>Hand dry</h3>
+            <p>Plush towels only. No air-drying, no water spots baking in the sun.</p>
+          </div>
+          <div class="step" data-reveal style="--d:.3s">
+            <span class="step__num">04</span>
+            <h3>Inside out</h3>
+            <p>Full House only: vacuum, wipe, glass. The cabin leaves matching the paint.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Visit ================= -->
+    <section class="section visit" id="visit">
+      <div class="container visit__grid">
+        <div data-reveal>
+          <p class="eyebrow"><svg aria-hidden="true"><use href="#crown"/></svg>Find us</p>
+          <h2 class="h2">Pull in. We&rsquo;ll take it from here.</h2>
+          <p class="visit__blurb">No app, no queue numbers, no nonsense. Drive in, point at your car, choose a wash &mdash; we handle the rest while you wait.</p>
+          <div class="visit__cta">
+            <a class="btn btn--gold" href="tel:+27763026570">Call to book &mdash; +27 76 302 6570</a>
+            <a class="btn btn--ghost" href="https://wa.me/27763026570">WhatsApp us</a>
+          </div>
+        </div>
+
+        <aside class="visit__panel" data-reveal style="--d:.12s">
+          <div class="visit__block">
+            <h3>The bay</h3>
+            <p>89 Stormberg Avenue<br />Bosmont, Johannesburg</p>
+          </div>
+          <div class="visit__block">
+            <h3>Hours</h3>
+            <ul class="visit__hours">
+              <li><span>Monday &ndash; Friday</span><span>[OPENING HOURS]</span></li>
+              <li><span>Saturday</span><span>[OPENING HOURS]</span></li>
+              <li><span>Sunday &amp; holidays</span><span>[OPENING HOURS]</span></li>
+            </ul>
+          </div>
+          <div class="visit__block">
+            <h3>Direct</h3>
+            <p><a href="tel:+27763026570">+27 76 302 6570</a><br />[YOUR EMAIL]<br />Instagram &mdash; @[YOUR INSTAGRAM]</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= Footer ================= -->
+  <footer class="footer">
+    <div class="container">
+      <p class="footer__shout" aria-hidden="true">Clean cars<br />hit different.</p>
+      <div class="footer__grid">
+        <div>
+          <a class="logo" href="#top" aria-label="Revamp Auto Car Wash — back to top">
+            <svg aria-hidden="true" style="color:var(--gold)"><use href="#crown"/></svg>
+            <span class="logo__text">
+              <span class="logo__name">REVAMP</span>
+              <span class="logo__sub">Auto Car Wash</span>
+            </span>
+          </a>
+          <p class="footer__tag">A hand car wash &amp; detail studio in Bosmont, Johannesburg. Two washes, done properly.</p>
+        </div>
+        <div>
+          <h3>Explore</h3>
+          <ul>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#process">Process</a></li>
+            <li><a href="#visit">Visit</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Contact</h3>
+          <ul>
+            <li><a href="#visit">89 Stormberg Avenue, Bosmont, Johannesburg</a></li>
+            <li><a href="tel:+27763026570">+27 76 302 6570</a></li>
+            <li><a href="mailto:hello@example.com">[YOUR EMAIL]</a></li>
+            <li><a href="https://instagram.com/" rel="noopener">@[YOUR INSTAGRAM]</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bar">
+        <p>&copy; <span data-year>2026</span> Revamp Auto Car Wash. All rights reserved.</p>
+        <p>Half House from R40 &middot; Full House from R80</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revamp Auto Car Wash — Clean Cars Hit Different | Bosmont, Johannesburg</title>
+<meta name="description" content="Revamp Auto Car Wash in Bosmont, Johannesburg. Half House wash R65, Full House wash R120. Hand-washed, snow-foamed and dried by hand. Clean cars hit different.">
+<meta name="theme-color" content="#0a0a0b">
+<meta property="og:title" content="Revamp Auto Car Wash — Clean Cars Hit Different">
+<meta property="og:description" content="Half House R65 · Full House R120 · Bigger vehicles +R20. 89 Stormberg Avenue, Bosmont.">
+<meta property="og:image" content="assets/hero.webp">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 20'%3E%3Crect width='24' height='20' rx='4' fill='%230a0a0b'/%3E%3Cpath d='M5 15 L6.5 7 L10 11 L12 5 L14 11 L17.5 7 L19 15 Z' fill='none' stroke='%23ffc72c' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js');</script>
+<style>
+/* ============ TOKENS ============ */
+/* Fonts (Anton + Space Grotesk) are injected at runtime via the FontFace API
+   in app.js — see FONT_SOURCES. Fallbacks below keep type sensible if JS is off. */
+:root{
+  --bg:#0a0a0b; --bg2:#0e0e10; --ink:#f2f1ec; --mut:#98968e;
+  --gold:#ffc72c; --gold-soft:rgba(255,199,44,.55);
+  --line:rgba(242,241,236,.12); --line2:rgba(242,241,236,.26);
+  --fd:'Anton',Impact,sans-serif; --fb:'Space Grotesk',system-ui,sans-serif;
+  --pad:clamp(5.5rem,11vw,10rem);
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+html.lenis,html.lenis body{height:auto;}
+.lenis.lenis-smooth{scroll-behavior:auto!important;}
+body{
+  background:var(--bg); color:var(--ink);
+  font:400 1rem/1.6 var(--fb);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+body.loading{overflow:hidden;}
+::selection{background:var(--gold);color:#0a0a0b;}
+img{display:block;max-width:100%;}
+a{color:inherit;text-decoration:none;}
+ul,ol{list-style:none;}
+.container{width:min(1280px,92vw);margin-inline:auto;}
+em{font-style:normal;}
+
+/* ============ SCROLLBAR (hidden) ============ */
+html{scrollbar-width:none;-ms-overflow-style:none;}
+html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none;}
+
+/* ============ SPLASH ============ */
+#loader{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-items:center;}
+.loader-crown{width:clamp(44px,6vw,64px);overflow:visible;}
+.loader-crown path{fill:none;stroke:var(--gold);stroke-width:1.5;stroke-linejoin:round;stroke-dasharray:70;stroke-dashoffset:70;}
+.loader-credit{margin-top:1.6rem;text-align:center;opacity:0;}
+.loader-credit span{display:block;font:500 .62rem/1 var(--fb);letter-spacing:.44em;text-transform:uppercase;color:var(--gold);margin-bottom:.85rem;}
+.loader-credit b{font:500 clamp(.95rem,1.6vw,1.15rem)/1.5 var(--fb);letter-spacing:.06em;color:var(--ink);font-weight:500;}
+
+/* ============ HEADER ============ */
+.site-head{position:fixed;top:clamp(10px,1.6vh,18px);left:50%;transform:translateX(-50%);z-index:70;
+  width:min(1200px,94vw);border-radius:999px;
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:1rem;
+  padding:.6rem .7rem .6rem 1.5rem;
+  background:rgba(13,13,16,.52);
+  backdrop-filter:blur(18px) saturate(1.35);-webkit-backdrop-filter:blur(18px) saturate(1.35);
+  border:1px solid rgba(255,255,255,.13);
+  box-shadow:0 12px 40px rgba(0,0,0,.38), inset 0 1px 0 rgba(255,255,255,.09);
+  transition:background .45s,border-color .45s,box-shadow .45s;}
+.site-head.scrolled{background:rgba(10,10,12,.8);border-color:rgba(255,255,255,.18);
+  box-shadow:0 16px 48px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.12);}
+body.menu-open .site-head{z-index:96;background:rgba(10,10,11,.65);}
+.head-actions{justify-self:end;display:flex;align-items:center;gap:.5rem;}
+@media (max-width:860px){.site-head{grid-template-columns:1fr auto;padding-inline:1.1rem .7rem;}}
+@media (max-width:480px){.head-actions .btn{display:none;}}
+.brand{display:flex;align-items:center;gap:.7rem;font:400 1.05rem/1 var(--fd);letter-spacing:.14em;text-transform:uppercase;}
+.brand svg{width:26px;flex:none;}
+.brand small{display:block;font:500 .55rem/1.4 var(--fb);letter-spacing:.42em;color:var(--mut);text-transform:uppercase;white-space:nowrap;}
+.nav{display:flex;gap:2.2rem;justify-self:center;}
+.nav a{position:relative;font:500 .74rem/1 var(--fb);letter-spacing:.26em;text-transform:uppercase;color:var(--mut);padding:.5rem 0;transition:color .3s;}
+.nav a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;background:var(--gold);transform:scaleX(0);transform-origin:right;transition:transform .45s var(--ease);}
+.nav a:hover{color:var(--ink);}
+.nav a:hover::after{transform:scaleX(1);transform-origin:left;}
+@media (max-width:860px){.nav{display:none;}}
+
+/* buttons */
+.btn{position:relative;display:inline-flex;align-items:center;gap:.7rem;overflow:hidden;white-space:nowrap;
+  font:700 .74rem/1 var(--fb);letter-spacing:.2em;text-transform:uppercase;
+  padding:1.05rem 1.9rem;border-radius:999px;cursor:pointer;color:var(--ink);
+  background:linear-gradient(135deg,rgba(255,255,255,.15),rgba(255,255,255,.05) 52%,rgba(255,255,255,.11));
+  border:1px solid rgba(255,255,255,.22);
+  backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);
+  box-shadow:0 10px 30px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.28), inset 0 -1px 0 rgba(255,255,255,.07);
+  transition:border-color .35s,box-shadow .35s,transform .25s,background .35s;}
+.btn svg{width:14px;transition:transform .4s var(--ease);}
+.btn:hover svg{transform:translateX(5px);}
+.btn::before{content:"";position:absolute;inset:0;z-index:0;
+  background:linear-gradient(105deg,transparent 42%,rgba(255,255,255,.4) 50%,transparent 58%);
+  transform:translateX(-130%);transition:transform .9s var(--ease);}
+.btn:hover::before{transform:translateX(130%);}
+.btn::after{content:"";position:absolute;left:1px;right:1px;top:1px;height:48%;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.26),rgba(255,255,255,0));opacity:.75;}
+.btn:hover{border-color:rgba(255,255,255,.42);
+  box-shadow:0 14px 40px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.36), inset 0 -1px 0 rgba(255,255,255,.1);}
+.btn:active{transform:scale(.97);}
+.btn-gold{color:#0a0a0b;
+  background:linear-gradient(135deg,rgba(255,199,44,.96),rgba(255,199,44,.6) 50%,rgba(255,199,44,.88));
+  border-color:rgba(255,220,110,.6);
+  box-shadow:0 10px 34px rgba(255,199,44,.26), inset 0 1px 0 rgba(255,255,255,.55), inset 0 -1px 0 rgba(0,0,0,.18);}
+.btn-gold::after{background:linear-gradient(180deg,rgba(255,255,255,.45),rgba(255,255,255,0));}
+.btn-gold:hover{border-color:rgba(255,230,150,.95);
+  box-shadow:0 16px 46px rgba(255,199,44,.4), inset 0 1px 0 rgba(255,255,255,.65), inset 0 -1px 0 rgba(0,0,0,.2);}
+.btn-ghost{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.18);}
+.btn-sm{padding:.8rem 1.35rem;}
+.btn>*{position:relative;z-index:1;}
+
+/* burger + menu */
+.burger{display:none;flex-direction:column;gap:6px;background:none;border:0;padding:.6rem;cursor:pointer;z-index:96;}
+.burger i{display:block;width:26px;height:2px;background:var(--ink);transition:transform .45s var(--ease),opacity .3s;}
+body.menu-open .burger i:nth-child(1){transform:translateY(4px) rotate(45deg);}
+body.menu-open .burger i:nth-child(2){transform:translateY(-4px) rotate(-45deg);}
+@media (max-width:860px){.burger{display:flex;}}
+.menu{position:fixed;inset:0;z-index:95;background:var(--bg);display:flex;flex-direction:column;justify-content:center;
+  padding:6rem clamp(1.4rem,6vw,3rem) 3rem;clip-path:inset(0 0 100% 0);visibility:hidden;}
+.menu a.m-link{font:400 clamp(2.4rem,10vw,4.2rem)/1.15 var(--fd);text-transform:uppercase;display:flex;align-items:baseline;gap:1rem;padding:.35rem 0;border-bottom:1px solid var(--line);}
+.menu .m-foot{margin-top:2.4rem;display:flex;flex-wrap:wrap;gap:1.6rem 3rem;color:var(--mut);font-size:.9rem;}
+.menu .m-foot b{color:var(--gold);font-weight:700;}
+
+/* ============ HERO ============ */
+.hero{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;}
+.hero-media{position:absolute;inset:0;z-index:0;}
+.hero-media img{width:100%;height:100%;object-fit:cover;object-position:50% 62%;transform-origin:50% 65%;}
+.hero-shade{position:absolute;inset:0;z-index:1;
+  background:linear-gradient(180deg,rgba(10,10,11,.72) 0%,rgba(10,10,11,.18) 34%,rgba(10,10,11,.35) 62%,rgba(10,10,11,.94) 100%),
+             radial-gradient(70% 60% at 18% 45%,rgba(10,10,11,.55),transparent 70%);}
+.hero-content{position:relative;z-index:2;padding-top:clamp(7rem,16vh,11rem);padding-bottom:clamp(2rem,5vh,3.5rem);}
+.eyebrow{display:flex;align-items:center;gap:1rem;font:500 .72rem/1 var(--fb);letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:clamp(1.2rem,3vh,2rem);}
+.eyebrow::before{content:"";width:clamp(28px,4vw,56px);height:1px;background:var(--gold);flex:none;}
+.hero-title{font:400 clamp(3.4rem,12.5vw,11rem)/0.94 var(--fd);text-transform:uppercase;letter-spacing:.005em;}
+.hero-title em{color:var(--gold);}
+.line{display:block;overflow:hidden;padding-bottom:.06em;margin-bottom:-.06em;}
+.js .line-in{display:block;transform:translateY(112%);}
+.hero-sub{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:1.6rem 3rem;margin-top:clamp(1.6rem,4vh,2.8rem);}
+.hero-sub p{max-width:44ch;font-size:clamp(.95rem,1.4vw,1.1rem);color:rgba(242,241,236,.82);}
+.hero-sub p strong{color:var(--gold);font-weight:700;}
+.hero-cta{display:flex;flex-wrap:wrap;gap:.9rem;}
+.js .fade-up{opacity:0;transform:translateY(26px);}
+.hero-foot{position:relative;z-index:2;display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;padding-bottom:1.6rem;}
+.scroll-cue{display:flex;align-items:center;gap:.9rem;font:500 .66rem/1 var(--fb);letter-spacing:.4em;text-transform:uppercase;color:var(--mut);}
+.scroll-cue i{position:relative;display:block;width:1px;height:56px;background:var(--line2);overflow:hidden;}
+.scroll-cue i::after{content:"";position:absolute;inset:0;background:var(--gold);transform:translateY(-100%);animation:cue 2s var(--ease) infinite;}
+@keyframes cue{0%{transform:translateY(-100%)}55%{transform:translateY(0)}100%{transform:translateY(100%)}}
+.hero-stats{display:flex;flex-wrap:wrap;align-items:center;background:rgba(12,12,15,.44);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,.13);border-radius:999px;padding:.3rem .6rem;
+  box-shadow:0 10px 30px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.1);}
+.hero-stats li{display:flex;align-items:baseline;gap:.55rem;padding:.4rem 1.3rem;font:500 .74rem/1 var(--fb);letter-spacing:.2em;text-transform:uppercase;color:rgba(242,241,236,.72);}
+.hero-stats li+li{border-left:1px solid var(--line2);}
+.hero-stats b{font:400 1.05rem/1 var(--fd);letter-spacing:.04em;color:var(--gold);}
+@media (max-width:640px){.hero-foot{flex-direction:column;align-items:flex-start;gap:1.4rem;}.hero-stats li:first-child{padding-left:0;}}
+
+/* ============ MARQUEE ============ */
+.marquee{background:var(--gold);color:#0a0a0b;overflow:hidden;border-block:1px solid #0a0a0b;}
+.marquee-track{display:flex;width:max-content;animation:mq 30s linear infinite;}
+.marquee:hover .marquee-track{animation-play-state:paused;}
+.marquee-track span{display:flex;align-items:center;gap:2.6rem;padding:.85rem 2.6rem .85rem 0;
+  font:400 clamp(.95rem,1.6vw,1.25rem)/1 var(--fd);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;}
+.marquee-track span::after{content:"";width:8px;height:8px;border-radius:50%;background:#0a0a0b;flex:none;}
+@keyframes mq{to{transform:translateX(-50%);}}
+
+/* ============ SECTION FURNITURE ============ */
+section{position:relative;}
+.label{display:flex;align-items:center;gap:.85rem;font:500 .7rem/1 var(--fb);letter-spacing:.38em;text-transform:uppercase;color:var(--mut);}
+.label::after{content:"";flex:1;height:1px;background:var(--line);max-width:120px;}
+.sec-head{margin-bottom:clamp(2.6rem,6vw,4.6rem);}
+.sec-title{font:400 clamp(2.5rem,7.4vw,6.2rem)/0.98 var(--fd);text-transform:uppercase;margin-top:1.5rem;}
+.sec-title em{color:var(--gold);}
+
+/* ============ MANIFESTO ============ */
+.manifesto{padding:var(--pad) 0;}
+.manifesto .split{display:grid;grid-template-columns:minmax(180px,.8fr) 2.2fr;gap:clamp(2rem,5vw,5rem);}
+.statement{font:500 clamp(1.45rem,3.3vw,2.75rem)/1.3 var(--fb);letter-spacing:-.01em;}
+.statement+.statement{margin-top:1.2rem;color:var(--gold);}
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em;}
+.js .wi{display:inline-block;transform:translateY(115%);}
+.manifesto-meta{display:flex;flex-wrap:wrap;gap:1.2rem 3rem;margin-top:clamp(2.4rem,5vw,3.6rem);padding-top:1.6rem;border-top:1px solid var(--line);}
+.manifesto-meta div{font:500 .74rem/1.7 var(--fb);letter-spacing:.22em;text-transform:uppercase;color:var(--mut);}
+.manifesto-meta b{display:block;font:400 1.5rem/1.2 var(--fd);letter-spacing:.03em;color:var(--ink);text-transform:uppercase;}
+.sticker{position:relative;width:clamp(150px,17vw,230px);margin-top:clamp(2.4rem,5vw,3.4rem);}
+.sticker img{width:72%;margin:auto;border-radius:50%;}
+.sticker svg{position:absolute;inset:0;width:100%;height:100%;animation:spin 24s linear infinite;}
+.sticker svg text{font:500 11px var(--fb);letter-spacing:.22em;fill:rgba(242,241,236,.55);text-transform:uppercase;}
+@keyframes spin{to{transform:rotate(360deg);}}
+@media (max-width:860px){.manifesto .split{grid-template-columns:1fr;}}
+.manifesto .split>.label{align-self:start;padding-top:.4em;}
+
+/* ============ SERVICES ============ */
+.services{padding:var(--pad) 0;border-top:1px solid var(--line);}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(1.2rem,2.4vw,2rem);}
+.card{position:relative;display:flex;flex-direction:column;background:var(--bg2);border:1px solid var(--line);border-radius:4px;
+  padding:clamp(1.7rem,3vw,2.8rem);transition:transform .55s var(--ease),border-color .45s,background .45s;overflow:hidden;border-radius:26px;}
+.card:hover{transform:translateY(-8px);border-color:var(--gold-soft);}
+.card-gold{background:linear-gradient(160deg,rgba(255,199,44,.12),rgba(255,199,44,.02) 55%),var(--bg2);border-color:rgba(255,199,44,.35);}
+.card-top{display:flex;align-items:flex-start;justify-content:flex-end;gap:1rem;margin-bottom:1.6rem;}
+.badge{width:clamp(96px,10vw,142px);border-radius:50%;box-shadow:0 18px 50px rgba(0,0,0,.55);transition:transform .7s var(--ease);}
+.card:hover .badge{transform:rotate(-7deg) scale(1.06);}
+.card h3{font:400 clamp(2.1rem,4vw,3.3rem)/1 var(--fd);text-transform:uppercase;letter-spacing:.01em;}
+.price{font:400 clamp(3rem,6vw,5rem)/1 var(--fd);color:var(--gold);margin:.7rem 0 1.1rem;}
+.price small{font:500 .8rem/1 var(--fb);letter-spacing:.24em;color:var(--mut);vertical-align:middle;margin-left:.8rem;text-transform:uppercase;}
+.card-desc{color:var(--mut);max-width:36ch;margin-bottom:1.5rem;}
+.inc{margin-bottom:2rem;}
+.inc li{display:flex;gap:.8rem;align-items:baseline;padding:.62rem 0;border-top:1px solid var(--line);font-size:.94rem;color:rgba(242,241,236,.85);}
+.inc li::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--gold);flex:none;translate:0 -1px;}
+.card .btn{margin-top:auto;align-self:flex-start;}
+@media (max-width:860px){.cards{grid-template-columns:1fr;}}
+.strip{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:clamp(1.2rem,3vw,2.6rem);
+  margin-top:clamp(1.2rem,2.4vw,2rem);padding:clamp(1.3rem,2.6vw,1.9rem) clamp(1.4rem,3vw,2.4rem);
+  border:1px solid var(--line);border-radius:22px;transition:background .45s,color .45s;}
+.strip-title{font:400 clamp(1.2rem,2.4vw,1.9rem)/1.1 var(--fd);text-transform:uppercase;}
+.strip-text{color:var(--mut);font-size:.95rem;}
+.strip-text b{color:var(--gold);}
+.strip svg{width:26px;transition:transform .45s var(--ease);}
+.strip:hover{background:var(--gold);}
+.strip:hover *{color:#0a0a0b !important;}
+.strip:hover svg{transform:translateX(8px);}
+@media (max-width:700px){.strip{grid-template-columns:1fr;gap:.7rem;}.strip svg{display:none;}}
+
+/* ============ PRICING ============ */
+.pricing{padding:var(--pad) 0;border-top:1px solid var(--line);}
+.table{border-bottom:1px solid var(--line);}
+.t-row{position:relative;display:grid;grid-template-columns:1.15fr 1.7fr auto;gap:clamp(1rem,3vw,2.5rem);
+  align-items:baseline;padding:clamp(1.2rem,2.4vw,1.7rem) clamp(.6rem,1.4vw,1.2rem);border-top:1px solid var(--line);transition:background .4s;}
+.t-head{font:500 .7rem/1 var(--fb);letter-spacing:.32em;text-transform:uppercase;color:var(--mut);border-top:0;}
+.t-head .t-price{font:inherit;letter-spacing:inherit;color:var(--mut);text-transform:inherit;}
+.t-name{font:400 clamp(1.35rem,2.6vw,2rem)/1.1 var(--fd);text-transform:uppercase;transition:transform .45s var(--ease),color .35s;}
+.t-mid{color:var(--mut);font-size:.95rem;}
+.t-price{font:400 clamp(1.35rem,2.6vw,2rem)/1 var(--fd);color:var(--gold);}
+.t-row:not(.t-head)::before{content:"";position:absolute;inset:3px 0;border-radius:18px;background:rgba(255,199,44,0);transition:background .4s;}
+.t-row:not(.t-head):hover::before{background:rgba(255,199,44,.08);}
+.t-row:not(.t-head):hover .t-name{transform:translateX(10px);color:var(--gold);}
+.fine{margin-top:1.5rem;color:var(--mut);font-size:.86rem;letter-spacing:.04em;}
+@media (max-width:700px){.t-row{grid-template-columns:1fr auto;}.t-mid{grid-column:1/-1;order:3;}.t-head .t-mid,.t-head .t-price{display:none;}}
+
+/* ============ METHOD ============ */
+.method{padding:var(--pad) 0;border-top:1px solid var(--line);background:var(--bg2);}
+.step{display:grid;grid-template-columns:minmax(170px,.7fr) 2.3fr;gap:clamp(1.2rem,4vw,4rem);align-items:baseline;
+  padding:clamp(1.8rem,3.6vw,2.8rem) 0;border-top:1px solid var(--line);}
+.step:first-of-type{border-top:0;}
+.step h3{font:400 clamp(1.4rem,2.8vw,2.1rem)/1.15 var(--fd);text-transform:uppercase;transition:color .35s,transform .45s var(--ease);}
+.step:hover h3{color:var(--gold);transform:translateX(8px);}
+.step p{color:var(--mut);max-width:56ch;}
+@media (max-width:640px){.step{grid-template-columns:1fr;gap:.5rem;}}
+
+/* ============ BOOK ============ */
+.book{padding:var(--pad) 0;overflow:hidden;
+  background:radial-gradient(58% 70% at 78% 12%,rgba(255,199,44,.11),transparent 68%),var(--bg);}
+.book-crown{position:absolute;right:3%;top:14%;width:clamp(200px,30vw,460px);fill:none;
+  stroke:rgba(242,241,236,.12);stroke-width:.55;stroke-linejoin:round;pointer-events:none;}
+.book-title{font:400 clamp(3rem,10.5vw,9rem)/0.95 var(--fd);text-transform:uppercase;margin:1.5rem 0 clamp(1.6rem,4vw,2.6rem);}
+.book-title em{color:var(--gold);}
+.phone{display:inline-block;font:400 clamp(1.7rem,5.4vw,4.2rem)/1.1 var(--fd);letter-spacing:.02em;color:var(--ink);
+  border-bottom:2px solid rgba(255,199,44,.4);padding-bottom:.35rem;transition:color .4s,border-color .4s;}
+.phone:hover{color:var(--gold);border-color:var(--gold);}
+.book-cta{display:flex;flex-wrap:wrap;gap:.9rem;margin-top:clamp(2rem,4vw,3rem);}
+.book-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:clamp(3rem,6vw,5rem);padding-top:2.2rem;border-top:1px solid var(--line);}
+.book-grid h4{font:700 .7rem/1 var(--fb);letter-spacing:.34em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;}
+.book-grid p{color:var(--mut);font-size:.95rem;line-height:1.75;}
+.book-grid a{text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--line2);transition:text-decoration-color .3s,color .3s;}
+.book-grid a:hover{color:var(--gold);text-decoration-color:var(--gold);}
+@media (max-width:760px){.book-grid{grid-template-columns:1fr;}}
+
+/* ============ FOOTER ============ */
+.foot{border-top:1px solid var(--line);background:var(--bg);}
+.foot-giant{position:relative;padding:clamp(3rem,7vw,5.5rem) 0 clamp(1rem,2vw,2rem);overflow:hidden;}
+.fg-wrap{position:relative;}
+.foot-giant span{display:block;font:400 clamp(2rem,8.2vw,7.4rem)/1.05 var(--fd);text-transform:uppercase;white-space:nowrap;padding-inline:max(4vw,calc((100vw - 1280px)/2));}
+.fg-base{color:transparent;-webkit-text-stroke:1px rgba(242,241,236,.22);}
+.fg-fill{position:absolute;inset:0;color:var(--gold);clip-path:inset(0 0 100% 0);}
+.fg-fill span{padding-inline:max(4vw,calc((100vw - 1280px)/2));}
+.foot-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;padding:clamp(3rem,6vw,4.6rem) 0;}
+.foot-grid h4{font:700 .7rem/1 var(--fb);letter-spacing:.34em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;}
+.foot-grid p{color:var(--mut);font-size:.95rem;line-height:1.75;}
+.foot-grid a{text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--line2);}
+.foot-grid a:hover{color:var(--gold);text-decoration-color:var(--gold);}
+.foot-base{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem 2rem;
+  padding:1.3rem 0;border-top:1px solid var(--line);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);}
+.foot-tag{color:var(--gold);font-weight:700;letter-spacing:.24em;}
+.top-link{background:none;border:0;color:var(--mut);font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer;transition:color .3s;}
+.top-link:hover{color:var(--gold);}
+@media (max-width:760px){.foot-grid{grid-template-columns:1fr;}}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important;}
+  html{scroll-behavior:auto;}
+}
+</style>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"AutoWash",
+  "name":"Revamp Auto Car Wash",
+  "slogan":"Clean cars hit different.",
+  "telephone":["+27 76 302 6570","+27 75 037 8818"],
+  "priceRange":"R65 - R140",
+  "address":{
+    "@type":"PostalAddress",
+    "streetAddress":"89 Stormberg Avenue",
+    "addressLocality":"Bosmont",
+    "addressRegion":"Gauteng",
+    "addressCountry":"ZA"
+  },
+  "makesOffer":[
+    {"@type":"Offer","name":"Half House Wash","description":"Basic exterior wash (wash & dry)","price":"65","priceCurrency":"ZAR"},
+    {"@type":"Offer","name":"Full House Wash","description":"Exterior wash plus interior vacuum","price":"120","priceCurrency":"ZAR"},
+    {"@type":"Offer","name":"Bigger Vehicles Surcharge","description":"SUVs, bakkies and other larger vehicles","price":"20","priceCurrency":"ZAR"}
+  ]
+}
+</script>
+</head>
+<body class="loading">
+
+<div id="loader" aria-hidden="true">
+  <div style="text-align:center;">
+    <svg class="loader-crown" viewBox="0 0 24 20"><path d="M4 16 L5.5 6 L9.5 11 L12 3.5 L14.5 11 L18.5 6 L20 16 Z"/></svg>
+    <div class="loader-credit">
+      <span>Developed by</span>
+      <b>Azariah Anderson and Joshua Boraine</b>
+    </div>
+  </div>
+</div>
+
+<header class="site-head" id="siteHead">
+  <a class="brand" href="#top" data-hover aria-label="Revamp Auto Car Wash — home">
+    <svg viewBox="0 0 24 20" aria-hidden="true"><path d="M4 16 L5.5 6 L9.5 11 L12 3.5 L14.5 11 L18.5 6 L20 16 Z" fill="none" stroke="#ffc72c" stroke-width="1.6" stroke-linejoin="round"/></svg>
+    <span>Revamp<small>Auto Car Wash</small></span>
+  </a>
+  <nav class="nav" aria-label="Primary">
+    <a href="#services" data-hover>Services</a>
+    <a href="#pricing" data-hover>Pricing</a>
+    <a href="#method" data-hover>Method</a>
+    <a href="#book" data-hover>Book</a>
+  </nav>
+  <div class="head-actions">
+    <a class="btn btn-gold btn-sm" data-hover href="https://wa.me/27763026570?text=Hey%20Revamp!%20I%27d%20like%20to%20book%20a%20wash." target="_blank" rel="noopener"><span>Book a wash</span></a>
+    <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><i></i><i></i></button>
+  </div>
+</header>
+
+<div class="menu" id="menu" aria-hidden="true">
+  <a class="m-link" href="#services">Services</a>
+  <a class="m-link" href="#pricing">Pricing</a>
+  <a class="m-link" href="#method">Method</a>
+  <a class="m-link" href="#book">Book</a>
+  <div class="m-foot">
+    <span>89 Stormberg Ave, Bosmont</span>
+    <span><b>+27 76 302 6570</b></span>
+    <span><b>+27 75 037 8818</b></span>
+    <span>walk-ins welcome</span>
+  </div>
+</div>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-media"><img src="__IMG_HERO__" alt="Glossy black BMW gleaming under golden light on the wet floor of Revamp Auto Car Wash" fetchpriority="high"></div>
+    <div class="hero-shade" aria-hidden="true"></div>
+    <div class="hero-content container">
+      <p class="eyebrow fade-up"><span>Bosmont, Johannesburg — Hand Car Wash</span></p>
+      <h1 class="hero-title">
+        <span class="line"><span class="line-in">Clean cars</span></span>
+        <span class="line"><span class="line-in">Hit different<em>.</em></span></span>
+      </h1>
+      <div class="hero-sub">
+        <p class="fade-up">Snow-foamed, hand-washed and dried by patient hands. Walk in dirty, roll out renewed — <strong>from R65</strong>.</p>
+        <div class="hero-cta fade-up">
+          <a class="btn btn-gold" data-hover href="https://wa.me/27763026570?text=Hey%20Revamp!%20I%27d%20like%20to%20book%20a%20wash." target="_blank" rel="noopener"><span>Book on WhatsApp</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 8h13M9 3l5 5-5 5"/></svg></a>
+          <a class="btn btn-ghost" data-hover href="tel:+27763026570"><span>+27 76 302 6570</span></a>
+        </div>
+      </div>
+    </div>
+    <div class="hero-foot container">
+      <div class="scroll-cue fade-up"><span>Scroll</span><i></i></div>
+      <ul class="hero-stats fade-up">
+        <li><b>R65</b> Half House</li>
+        <li><b>R120</b> Full House</li>
+        <li><b>+R20</b> Bigger rides</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>Half House — R65</span><span>Full House — R120</span><span>Bigger vehicles +R20</span><span>Walk-ins welcome</span><span>Bosmont, JHB</span><span>Clean cars hit different</span>
+      <span>Half House — R65</span><span>Full House — R120</span><span>Bigger vehicles +R20</span><span>Walk-ins welcome</span><span>Bosmont, JHB</span><span>Clean cars hit different</span>
+    </div>
+  </div>
+
+  <!-- MANIFESTO -->
+  <section class="manifesto" id="about">
+    <div class="container split">
+      <div class="label"><span>The standard</span></div>
+      <div>
+        <p class="statement" data-split>No machines. No shortcuts. No swirl marks. Every car that rolls into Revamp gets thick foam, soft mitts and patient hands — inside and out, done properly.</p>
+        <p class="statement" data-split>Because clean cars hit different.</p>
+        <div class="manifesto-meta fade-up">
+          <div><b>R65</b>Half house</div>
+          <div><b>R120</b>Full house</div>
+          <div><b>+R20</b>SUVs &amp; bakkies</div>
+          <div><b>100%</b>By hand</div>
+        </div>
+        <div class="sticker fade-up">
+          <img src="__IMG_LOGO__" alt="Revamp Auto Car Wash logo">
+          <svg viewBox="0 0 200 200" aria-hidden="true">
+            <defs><path id="cir" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"/></defs>
+            <text><textPath href="#cir">Revamp Auto Car Wash • Bosmont, Johannesburg • </textPath></text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="container">
+      <div class="sec-head">
+        <div class="label"><span>Services</span></div>
+        <h2 class="sec-title"><span class="line"><span class="line-in">Choose your wash<em>.</em></span></span></h2>
+      </div>
+      <div class="cards">
+        <article class="card" data-hover>
+          <div class="card-top"><img class="badge" src="__IMG_HALF__" alt="Half House Wash — R65 badge"></div>
+          <h3>Half House</h3>
+          <div class="price">R<span data-count="65">0</span><small>Wash &amp; dry</small></div>
+          <p class="card-desc">The outside, done properly. A thorough exterior hand wash finished by hand.</p>
+          <ul class="inc">
+            <li>Exterior hand wash</li>
+            <li>Wheels, rims &amp; arches cleaned</li>
+            <li>Hand-dried, spot-free finish</li>
+            <li>Tyres dressed black</li>
+          </ul>
+          <a class="btn btn-ghost" data-hover href="https://wa.me/27763026570?text=Hey%20Revamp!%20I%27d%20like%20to%20book%20a%20HALF%20HOUSE%20wash%20(R65)." target="_blank" rel="noopener"><span>Book Half House</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 8h13M9 3l5 5-5 5"/></svg></a>
+        </article>
+        <article class="card card-gold" data-hover>
+          <div class="card-top"><img class="badge" src="__IMG_FULL__" alt="Full House Car Wash — R120 badge"></div>
+          <h3>Full House</h3>
+          <div class="price">R<span data-count="120">0</span><small>Wash + vacuum</small></div>
+          <p class="card-desc">Outside shines, inside breathes. The full exterior wash plus a proper interior vacuum.</p>
+          <ul class="inc">
+            <li>Everything in Half House</li>
+            <li>Full interior vacuum</li>
+            <li>Dash, console &amp; door cards wiped</li>
+            <li>Glass cleaned inside &amp; out</li>
+          </ul>
+          <a class="btn btn-gold" data-hover href="https://wa.me/27763026570?text=Hey%20Revamp!%20I%27d%20like%20to%20book%20a%20FULL%20HOUSE%20wash%20(R120)." target="_blank" rel="noopener"><span>Book Full House</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 8h13M9 3l5 5-5 5"/></svg></a>
+        </article>
+      </div>
+      <a class="strip fade-up" data-hover href="#pricing">
+        <span class="strip-title">Driving something bigger?</span>
+        <span class="strip-text">SUVs, bakkies &amp; other larger vehicles usually add a surcharge of <b>+R20</b> on any wash.</span>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 8h13M9 3l5 5-5 5"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="pricing" id="pricing">
+    <div class="container">
+      <div class="sec-head">
+        <div class="label"><span>Pricing</span></div>
+        <h2 class="sec-title"><span class="line"><span class="line-in">Straight prices<em>.</em></span></span><span class="line"><span class="line-in">No surprises<em>.</em></span></span></h2>
+      </div>
+      <div class="table">
+        <div class="t-row t-head"><span>Service</span><span class="t-mid">What you get</span><span class="t-price">Price</span></div>
+        <div class="t-row" data-hover><span class="t-name">Half House</span><span class="t-mid">Basic exterior wash (wash &amp; dry)</span><span class="t-price">R65</span></div>
+        <div class="t-row" data-hover><span class="t-name">Full House</span><span class="t-mid">Exterior wash plus interior vacuum</span><span class="t-price">R120</span></div>
+        <div class="t-row" data-hover><span class="t-name">Bigger vehicles</span><span class="t-mid">SUVs, bakkies &amp; other larger vehicles</span><span class="t-price">+R20</span></div>
+      </div>
+      <p class="fine fade-up">Prices above are for standard sedans. Walk-ins welcome — book ahead on WhatsApp to skip the queue.</p>
+    </div>
+  </section>
+
+  <!-- METHOD -->
+  <section class="method" id="method">
+    <div class="container">
+      <div class="sec-head">
+        <div class="label"><span>The method</span></div>
+        <h2 class="sec-title"><span class="line"><span class="line-in">Foam. Mitts<em>.</em></span></span><span class="line"><span class="line-in">Patience<em>.</em></span></span></h2>
+      </div>
+      <ol>
+        <li class="step"><h3>Pre-rinse</h3><p>Loose dirt and grit get rinsed away before anything ever touches your paint — no scratch-starting surprises.</p></li>
+        <li class="step"><h3>Snow foam</h3><p>A thick blanket of pH-neutral foam clings to the body and lifts the grime off, so the wash itself stays safe.</p></li>
+        <li class="step"><h3>Two-bucket hand wash</h3><p>Clean mitts, grit guards, panel by panel, top to bottom. The way a hand wash is supposed to be done.</p></li>
+        <li class="step"><h3>Hand dry &amp; finish</h3><p>Plush microfibre dry, glass spotless, tyres dressed black. Full House cars get the interior vacuumed too.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- BOOK -->
+  <section class="book" id="book">
+    <svg class="book-crown" viewBox="0 0 24 20" aria-hidden="true"><path d="M4 16 L5.5 6 L9.5 11 L12 3.5 L14.5 11 L18.5 6 L20 16 Z"/></svg>
+    <div class="container">
+      <div class="label"><span>Book a slot</span></div>
+      <h2 class="book-title"><span class="line"><span class="line-in">Book your</span></span><span class="line"><span class="line-in">Wash<em>.</em></span></span></h2>
+      <a class="phone fade-up" data-hover href="tel:+27763026570">+27 76 302 6570</a>
+      <div class="book-cta fade-up">
+        <a class="btn btn-gold" data-hover href="https://wa.me/27763026570?text=Hey%20Revamp!%20I%27d%20like%20to%20book%20a%20wash." target="_blank" rel="noopener"><span>WhatsApp us</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 8h13M9 3l5 5-5 5"/></svg></a>
+        <a class="btn btn-ghost" data-hover href="https://www.google.com/maps/search/?api=1&query=89+Stormberg+Avenue+Bosmont+Johannesburg" target="_blank" rel="noopener"><span>Get directions</span></a>
+      </div>
+      <div class="book-grid">
+        <div><h4>Find us</h4><p>89 Stormberg Avenue<br>Bosmont, Johannesburg<br>Gauteng, South Africa</p><p style="margin-top:.8rem;"><a href="https://www.google.com/maps/search/?api=1&query=89+Stormberg+Avenue+Bosmont+Johannesburg" target="_blank" rel="noopener">Open in Maps</a></p></div>
+        <div><h4>Call / WhatsApp</h4><p><a href="tel:+27763026570">+27 76 302 6570</a> &middot; <a href="https://wa.me/27763026570" target="_blank" rel="noopener">WhatsApp</a><br><a href="tel:+27750378818">+27 75 037 8818</a> &middot; <a href="https://wa.me/27750378818" target="_blank" rel="noopener">WhatsApp</a></p></div>
+        <div><h4>Good to know</h4><p>Walk-ins welcome.<br>Book ahead to skip the queue.<br>SUVs, bakkies &amp; larger vehicles +R20.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="foot">
+  <div class="foot-giant" id="footGiant">
+    <div class="fg-wrap">
+      <span class="fg-base">Clean cars hit different.</span>
+      <div class="fg-fill" aria-hidden="true"><span>Clean cars hit different.</span></div>
+    </div>
+  </div>
+  <div class="container foot-grid">
+    <div><h4>Find us</h4><p>89 Stormberg Avenue<br>Bosmont, Johannesburg</p></div>
+    <div><h4>Call / WhatsApp</h4><p><a href="tel:+27763026570">+27 76 302 6570</a><br><a href="tel:+27750378818">+27 75 037 8818</a></p></div>
+    <div><h4>Hours</h4><p>Walk-ins welcome<br>Book ahead to skip the queue</p></div>
+  </div>
+  <div class="container foot-base">
+    <span>© 2026 Revamp Auto Car Wash</span>
+    <span>Developed by Azariah Anderson and Joshua Boraine</span>
+    <span class="foot-tag">Clean cars hit different.</span>
+    <button class="top-link" id="toTop" data-hover>Back to top ↑</button>
+  </div>
+</footer>
+
+<script>__GSAP__</script>
+<script>__ST__</script>
+<script>__LENIS__</script>
+<script>__APP__</script>
+</body>
+</html>

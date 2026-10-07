@@ -1,0 +1,14 @@
+{
+  "name": "Revamp Auto Car Wash",
+  "short_name": "Revamp",
+  "description": "Hand car wash & detail studio. Half House and Full House washes. Clean cars hit different.",
+  "start_url": "/",
+  "background_color": "#0B0B0C",
+  "theme_color": "#0B0B0C",
+  "display": "minimal-ui",
+  "icons": [
+    { "src": "assets/img/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "assets/img/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "assets/img/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
