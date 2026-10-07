@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <!-- Revamp favicon: crown on ink tile. Geometry matches mark.svg exactly. -->
-  <rect width="64" height="64" rx="13.8" fill="#0B0B0C"/>
-  <g transform="translate(32 32) scale(0.74) translate(-32 -31)">
-    <polygon fill="#FFC700" points="14,45 8,17 22,29 32,7 42,29 56,17 50,45"/>
-    <rect fill="#FFC700" x="12" y="50" width="40" height="6" rx="1"/>
-  </g>
-</svg>

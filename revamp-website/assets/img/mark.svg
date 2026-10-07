@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Revamp crown mark">
-  <!-- Revamp crown — single source of truth for the mark geometry.
-       Do not redraw: reuse these exact coordinates in every medium. -->
-  <polygon fill="#FFC700" points="14,45 8,17 22,29 32,7 42,29 56,17 50,45"/>
-  <rect fill="#FFC700" x="12" y="50" width="40" height="6" rx="1"/>
-</svg>
