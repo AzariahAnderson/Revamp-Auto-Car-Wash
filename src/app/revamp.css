@@ -294,13 +294,16 @@ section{position:relative;}
 .phone:hover{color:var(--gold);border-color:var(--gold);}
 .book-cta{display:flex;flex-wrap:wrap;gap:.9rem;margin-top:clamp(2rem,4vw,3rem);justify-content:center;}
 
-/* ---- live map panel (custom Leaflet, theme-matched) ---- */
+/* ---- live map panel (custom black & gold vector map) ---- */
 .book-map{display:grid;grid-template-columns:1.45fr 1fr;gap:clamp(1.2rem,2.4vw,2rem);
   margin-top:clamp(2.8rem,6vw,4.4rem);text-align:left;}
 .map-shell{position:relative;border:1px solid var(--line);border-radius:22px;overflow:hidden;
   background:#0b0b0d;min-height:380px;transition:border-color .4s;}
 .map-shell:hover{border-color:var(--line2);}
 .map-canvas{position:absolute;inset:0;z-index:0;}
+/* MapLibre adds its .maplibregl-map class (position:relative) to the same
+   node — restore the full-bleed absolute wrapper or the map collapses to 0 */
+.map-canvas.maplibregl-map{position:absolute;inset:0;width:100%;height:100%;}
 .map-canvas:focus-visible{outline:2px solid var(--gold);outline-offset:-2px;}
 
 /* live chip overlay */
@@ -346,21 +349,25 @@ section{position:relative;}
   .map-shell.zoom-on::after{opacity:0;}
 }
 
-/* leaflet chrome, re-skinned */
-.leaflet-container{background:#0b0b0d;font:400 .7rem/1.4 var(--fb);outline:none;}
-/* custom dark treatment for OSM raster tiles — inverts to matte charcoal,
-   mutes saturation and keeps hues readable (the map is genuinely bespoke) */
-.leaflet-tile-pane{filter:invert(1) hue-rotate(185deg) saturate(.34) brightness(.8) contrast(1.3);}
-.leaflet-bar{border:1px solid var(--line)!important;border-radius:12px!important;overflow:hidden;
-  box-shadow:0 10px 26px rgba(0,0,0,.45)!important;}
-.leaflet-bar a{background:#121215!important;color:var(--ink)!important;border-bottom:1px solid var(--line)!important;
-  width:34px!important;height:34px!important;line-height:32px!important;}
-.leaflet-bar a:last-child{border-bottom:0!important;}
-.leaflet-bar a:hover{background:#1b1b20!important;color:var(--gold)!important;}
-.leaflet-control-attribution{background:rgba(10,10,12,.78)!important;color:var(--mut)!important;
-  font:400 .56rem/1.5 var(--fb)!important;padding:2px 8px;}
-.leaflet-control-attribution a{color:rgba(242,241,236,.62)!important;text-decoration:none;}
-.leaflet-control-attribution a:hover{color:var(--gold)!important;}
+/* maplibre chrome, re-skinned — matte black + gold, flat */
+.maplibregl-map{background:#09090a;font:400 .7rem/1.4 var(--fb);outline:none;}
+.maplibregl-canvas:focus-visible{outline:2px solid var(--gold);outline-offset:-2px;}
+.maplibregl-ctrl-bottom-right,.maplibregl-ctrl-bottom-left{z-index:640;}
+.maplibregl-ctrl-group{border:1px solid var(--line);border-radius:12px;overflow:hidden;
+  box-shadow:none!important;background:#121215;}
+.maplibregl-ctrl-group button{width:32px!important;height:32px!important;background:#121215!important;
+  border-bottom:1px solid var(--line);cursor:pointer;}
+.maplibregl-ctrl-group button:last-child{border-bottom:0!important;}
+.maplibregl-ctrl-group button:hover{background:#1b1b20!important;}
+.maplibregl-ctrl-group button .maplibregl-ctrl-icon{filter:invert(1) opacity(.8);transition:filter .3s;}
+.maplibregl-ctrl-group button:hover .maplibregl-ctrl-icon{filter:invert(1) sepia(1) saturate(4.2) hue-rotate(-8deg);}
+.maplibregl-ctrl-attrib.maplibregl-compact{background:rgba(10,10,12,.8)!important;color:var(--mut);
+  font:400 .58rem/1.5 var(--fb);border:1px solid var(--line);border-radius:10px;}
+.maplibregl-ctrl-attrib{background:rgba(10,10,12,.8)!important;color:var(--mut);
+  font:400 .58rem/1.5 var(--fb);border:1px solid var(--line);border-radius:10px;}
+.maplibregl-ctrl-attrib a{color:rgba(242,241,236,.62);text-decoration:none;}
+.maplibregl-ctrl-attrib a:hover{color:var(--gold);}
+.maplibregl-ctrl-attrib-button{filter:invert(1) opacity(.75);}
 
 /* bespoke gold crown pin + live pulse ring */
 .rv-pin{position:relative;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
@@ -370,11 +377,14 @@ section{position:relative;}
   animation:rv-ping 2.8s cubic-bezier(.22,1,.36,1) infinite;pointer-events:none;}
 @keyframes rv-ping{0%{transform:scale(.85);opacity:.8}75%,100%{transform:scale(2);opacity:0}}
 
-/* permanent label chip */
-.rv-tip{background:#121215!important;border:1px solid var(--line2)!important;color:var(--ink)!important;
-  border-radius:12px!important;font:500 .62rem/1 var(--fb)!important;letter-spacing:.2em;text-transform:uppercase;
-  padding:.6rem .9rem!important;box-shadow:0 12px 30px rgba(0,0,0,.5)!important;}
-.rv-tip::before{display:none!important;}
+/* marker root + permanent label chip (right of pin; above the pin on mobile) */
+.rv-marker{position:relative;width:38px;height:38px;}
+.rv-tag{position:absolute;left:48px;top:50%;transform:translateY(-50%);white-space:nowrap;pointer-events:none;
+  background:#121215;border:1px solid var(--line2);color:var(--ink);border-radius:12px;
+  font:500 .62rem/1 var(--fb);letter-spacing:.2em;text-transform:uppercase;padding:.6rem .9rem;}
+@media (max-width:860px){
+  .rv-tag{left:50%;top:auto;bottom:48px;transform:translateX(-50%);}
+}
 
 /* live side panel */
 .map-side{display:flex;flex-direction:column;gap:1.2rem;}
@@ -402,7 +412,7 @@ section{position:relative;}
 .hours li.today b{color:var(--gold);}
 .hours li.today span::after{content:" · today";color:var(--gold);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;}
 .book-note{margin-top:1.6rem;color:var(--mut);font-size:.88rem;letter-spacing:.02em;}
-@media (max-width:860px){.book-map{grid-template-columns:1fr;}.map-shell{min-height:320px;}}
+@media (max-width:860px){.book-map{grid-template-columns:1fr;}.map-shell{min-height:320px;}.rv-tag{bottom:48px;}}
 
 /* ============ FOOTER ============ */
 .foot{border-top:1px solid var(--line);background:var(--bg);}

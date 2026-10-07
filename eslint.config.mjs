@@ -52,6 +52,8 @@ const eslintConfig = [...nextCoreWebVitals, ...nextTypescript, {
     "next-env.d.ts",
     "examples/**",
     "skills",
+    // self-hosted vendor bundle (maplibre worker) — never lint minified code
+    "public/**",
     // sandbox-only template files (gitignored, not part of the website)
     "src/components/ui/**",
     "src/hooks/**",

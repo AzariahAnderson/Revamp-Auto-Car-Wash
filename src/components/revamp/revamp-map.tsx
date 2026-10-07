@@ -2,22 +2,24 @@
 
 /**
  * REVAMP — custom live map panel.
- * Dark-themed Leaflet map (CARTO "dark matter" tiles) with a bespoke gold
- * crown pin, permanent label chip, custom zoom/attribution styling and a
- * REAL-TIME status panel: live SAST clock + open/closed computed from the
+ * MapLibre GL with a fully hand-authored BLACK & GOLD vector style
+ * (OpenFreeMap planet tiles — free, keyless OpenMapTiles schema):
+ * matte-black canvas, gold road hierarchy, muted gold labels — matches
+ * the site tokens (--bg / --gold) exactly, no raster filter hacks.
+ * REAL-TIME: live SAST clock + open/closed status computed from the
  * shop's trading hours, ticking every second.
  *
- * Data-friendly: the map only initialises when scrolled near (Intersection-
- * Observer) and tiles are skipped entirely for Data-Saver browsers.
+ * Data-friendly: the map bundle + tiles only load when scrolled near
+ * (IntersectionObserver) and are skipped entirely for Data-Saver browsers.
  */
 
 import { useEffect, useRef, useState } from 'react';
-import type { Map as LeafletMap } from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+import type { Map as MLMap, StyleSpecification } from 'maplibre-gl';
+import 'maplibre-gl/dist/maplibre-gl.css';
 
 const TZ = 'Africa/Johannesburg';
 const SHOP = { lat: -26.18905, lng: 27.95321 }; // Stormberg Avenue, Bosmont
-const ZOOM = 16;
+const ZOOM = 15.6;
 
 const MAPS_URL =
   'https://www.google.com/maps/search/?api=1&query=89+Stormberg+Avenue+Bosmont+Johannesburg';
@@ -25,18 +27,19 @@ const MAPS_URL =
 const CROWN_PATH = 'M4 16 L5.5 6 L9.5 11 L12 3.5 L14.5 11 L18.5 6 L20 16 Z';
 
 /**
- * Trading hours (24h SAST). Keys are JS day indexes (0 = Sunday).
- * Single source of truth for the live status + the visible hours table
- * (and mirrored into the JSON-LD in src/app/page.tsx).
+ * Trading hours (24h SAST) — 09:00–18:00 every day.
+ * Keys are JS day indexes (0 = Sunday). Single source of truth for the
+ * live status + the visible hours table (mirrored into the JSON-LD in
+ * src/app/page.tsx).
  */
 const HOURS: Record<number, [number, number] | null> = {
-  0: [8, 13], // Sun
-  1: [8, 17], // Mon
-  2: [8, 17],
-  3: [8, 17],
-  4: [8, 17],
-  5: [8, 17], // Fri
-  6: [8, 15], // Sat
+  0: [9, 18], // Sun
+  1: [9, 18], // Mon
+  2: [9, 18],
+  3: [9, 18],
+  4: [9, 18],
+  5: [9, 18], // Fri
+  6: [9, 18], // Sat
 };
 
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -80,6 +83,195 @@ function statusFor(s: Sast): { open: boolean; note: string } {
   return { open: false, note: 'Call us' };
 }
 
+/* ============ hand-authored BLACK & GOLD vector style ============ */
+
+const C = {
+  bg: '#09090a',
+  water: '#101013',
+  building: '#131316',
+  boundary: '#3a3112',
+  minor: '#4a4117',
+  tertiary: '#8a7019',
+  secondary: '#b28e1f',
+  primary: '#d3a624',
+  trunk: '#eeba2a',
+  motorway: '#ffc72c',
+  rail: '#2a2818',
+  roadLabel: '#6a5b1f',
+  suburb: '#7d6b20',
+  place: '#b28e1f',
+  storm: '#ffc72c',
+};
+
+const widths = (stops: [number, number][]) => [
+  'interpolate',
+  ['linear'],
+  ['zoom'],
+  ...stops.flat(),
+];
+
+const road = (
+  id: string,
+  filter: unknown,
+  color: string,
+  stops: [number, number][],
+  minzoom: number,
+  dash?: number[]
+) => ({
+  id,
+  type: 'line',
+  source: 'omt',
+  'source-layer': 'transportation',
+  filter,
+  minzoom,
+  layout: { 'line-cap': 'round', 'line-join': 'round' },
+  paint: {
+    'line-color': color,
+    'line-width': widths(stops),
+    ...(dash ? { 'line-dasharray': dash } : {}),
+  },
+});
+
+const RV_STYLE = {
+  version: 8,
+  glyphs: 'https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf',
+  sources: {
+    omt: {
+      type: 'vector',
+      // TileJSON endpoint — OpenFreeMap rotates dated tile snapshots, so the
+      // live {z}/{x}/{y} template must always be resolved from here.
+      url: 'https://tiles.openfreemap.org/planet',
+      maxzoom: 14,
+      attribution:
+        '&copy; <a href="https://www.openfreemap.org" target="_blank" rel="noopener noreferrer">OpenFreeMap</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors',
+    },
+  },
+  layers: [
+    { id: 'bg', type: 'background', paint: { 'background-color': C.bg } },
+    {
+      id: 'water',
+      type: 'fill',
+      source: 'omt',
+      'source-layer': 'water',
+      paint: { 'fill-color': C.water },
+    },
+    {
+      id: 'waterway',
+      type: 'line',
+      source: 'omt',
+      'source-layer': 'waterway',
+      minzoom: 10,
+      paint: { 'line-color': C.water, 'line-width': widths([[10, 0.5], [16, 1.5], [18, 3]]) },
+    },
+    {
+      id: 'building',
+      type: 'fill',
+      source: 'omt',
+      'source-layer': 'building',
+      minzoom: 14,
+      paint: {
+        'fill-color': C.building,
+        'fill-opacity': ['interpolate', ['linear'], ['zoom'], 14, 0.45, 16, 1],
+      },
+    },
+    {
+      id: 'admin',
+      type: 'line',
+      source: 'omt',
+      'source-layer': 'boundary',
+      filter: ['<=', ['get', 'admin_level'], 4],
+      paint: {
+        'line-color': C.boundary,
+        'line-width': 0.8,
+        'line-dasharray': [2, 2],
+        'line-opacity': 0.9,
+      },
+    },
+    road('rail', ['==', ['get', 'class'], 'rail'], C.rail, [[12, 0.4], [16, 0.9], [18, 1.6]], 12, [3, 2]),
+    road(
+      'road-minor',
+      ['in', ['get', 'class'], ['literal', ['minor', 'service', 'track', 'pedestrian', 'living_street']]],
+      C.minor,
+      [[13, 0.3], [15, 0.7], [17, 1.3], [18.5, 2.1]],
+      13
+    ),
+    road('road-tertiary', ['==', ['get', 'class'], 'tertiary'], C.tertiary, [[12, 0.4], [15, 0.9], [17, 1.6], [18.5, 2.4]], 12),
+    road('road-secondary', ['==', ['get', 'class'], 'secondary'], C.secondary, [[11, 0.4], [14, 1], [16, 1.8], [18.5, 2.8]], 11),
+    road('road-primary', ['==', ['get', 'class'], 'primary'], C.primary, [[11, 0.5], [14, 1.1], [16, 2.1], [18.5, 3.3]], 11),
+    road('road-trunk', ['==', ['get', 'class'], 'trunk'], C.trunk, [[10, 0.5], [14, 1.3], [16, 2.4], [18.5, 3.8]], 10),
+    road('road-motorway', ['==', ['get', 'class'], 'motorway'], C.motorway, [[9, 0.6], [14, 1.5], [16, 2.7], [18.5, 4.4]], 9),
+    {
+      id: 'road-labels',
+      type: 'symbol',
+      source: 'omt',
+      'source-layer': 'transportation_name',
+      minzoom: 15,
+      layout: {
+        'symbol-placement': 'line',
+        'text-font': ['Noto Sans Regular'],
+        'text-field': ['coalesce', ['get', 'name:latin'], ['get', 'name']],
+        'text-size': 9.5,
+        'text-letter-spacing': 0.08,
+        'text-max-angle': 30,
+      },
+      paint: { 'text-color': C.roadLabel, 'text-halo-color': C.bg, 'text-halo-width': 1.2 },
+    },
+    {
+      id: 'stormberg-label',
+      type: 'symbol',
+      source: 'omt',
+      'source-layer': 'transportation_name',
+      minzoom: 13,
+      filter: [
+        'in',
+        ['downcase', ['coalesce', ['get', 'name:latin'], ['get', 'name']]],
+        ['literal', ['stormberg avenue', 'stormberg ave', 'stormberg straat', 'stormberg road', 'stormberg rd']],
+      ],
+      layout: {
+        'symbol-placement': 'line',
+        'text-font': ['Noto Sans Bold'],
+        'text-field': ['coalesce', ['get', 'name:latin'], ['get', 'name']],
+        'text-size': 11,
+        'text-letter-spacing': 0.14,
+      },
+      paint: { 'text-color': C.storm, 'text-halo-color': C.bg, 'text-halo-width': 1.6 },
+    },
+    {
+      id: 'place-suburb',
+      type: 'symbol',
+      source: 'omt',
+      'source-layer': 'place',
+      minzoom: 11,
+      filter: ['in', ['get', 'class'], ['literal', ['suburb', 'neighbourhood', 'village', 'hamlet', 'quarter']]],
+      layout: {
+        'text-field': ['coalesce', ['get', 'name:latin'], ['get', 'name']],
+        'text-font': ['Noto Sans Regular'],
+        'text-size': ['interpolate', ['linear'], ['zoom'], 11, 8.5, 16, 11],
+        'text-letter-spacing': 0.12,
+        'text-max-width': 8,
+      },
+      paint: { 'text-color': C.suburb, 'text-halo-color': C.bg, 'text-halo-width': 1.2 },
+    },
+    {
+      id: 'place-city',
+      type: 'symbol',
+      source: 'omt',
+      'source-layer': 'place',
+      minzoom: 7,
+      filter: ['in', ['get', 'class'], ['literal', ['city', 'town']]],
+      layout: {
+        'text-field': ['coalesce', ['get', 'name:latin'], ['get', 'name']],
+        'text-font': ['Noto Sans Bold'],
+        'text-size': ['interpolate', ['linear'], ['zoom'], 7, 10, 14, 14],
+        'text-letter-spacing': 0.16,
+        'text-transform': 'uppercase',
+        'text-max-width': 8,
+      },
+      paint: { 'text-color': C.place, 'text-halo-color': C.bg, 'text-halo-width': 1.4 },
+    },
+  ],
+} as unknown as StyleSpecification;
+
 const iconProps = {
   viewBox: '0 0 24 24',
   fill: 'none',
@@ -105,9 +297,7 @@ const ClockIcon = () => (
 );
 
 const HoursRows = [
-  { label: 'Mon – Fri', open: 8, close: 17, days: [1, 2, 3, 4, 5] },
-  { label: 'Saturday', open: 8, close: 15, days: [6] },
-  { label: 'Sunday', open: 8, close: 13, days: [0] },
+  { label: 'Monday – Sunday', open: 9, close: 18, days: [0, 1, 2, 3, 4, 5, 6] },
 ];
 
 export default function LiveMapPanel() {
@@ -127,9 +317,10 @@ export default function LiveMapPanel() {
     const canvas = canvasRef.current;
     if (!shell || !canvas) return;
 
-    let map: LeafletMap | null = null;
+    let map: MLMap | null = null;
     let io: IntersectionObserver | null = null;
     let ro: ResizeObserver | null = null;
+    let safety = 0;
     let cancelled = false;
 
     const skipTiles =
@@ -143,60 +334,74 @@ export default function LiveMapPanel() {
         return;
       }
       try {
-        const L = (await import('leaflet')).default;
+        const maplibregl = await import('maplibre-gl');
         if (cancelled) return;
+        // MapLibre v6 resolves its module worker relative to the bundled main
+        // file, which no bundler can serve — point it at the self-hosted copy
+        // in /public (same version, single self-contained file).
+        maplibregl.setWorkerUrl('/maplibre-gl-worker.mjs');
 
-        map = L.map(canvas, {
-          zoomControl: false,
+        const m = new maplibregl.Map({
+          container: canvas,
+          style: RV_STYLE,
+          center: [SHOP.lng, SHOP.lat],
+          zoom: ZOOM,
+          minZoom: 4,
+          maxZoom: 18.5,
           attributionControl: false,
-          scrollWheelZoom: false, // page scroll first — zoom unlocks on click
-          zoomSnap: 0.25,
+          scrollZoom: false, // page scroll first — zoom unlocks on click
+          dragRotate: false,
+          touchPitch: false,
+          pitchWithRotate: false,
+          fadeDuration: 160,
         });
-        map.setView([SHOP.lat, SHOP.lng], ZOOM, { animate: false });
+        map = m;
 
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          maxZoom: 19,
-        }).addTo(map);
+        m.addControl(
+          new maplibregl.NavigationControl({ showCompass: false, visualizePitch: false }),
+          'bottom-right'
+        );
+        m.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-left');
 
-        L.control.zoom({ position: 'bottomright' }).addTo(map);
-        L.control.attribution({ position: 'bottomleft', prefix: false })
-          .addAttribution('&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors')
-          .addTo(map);
+        /* bespoke crown pin + permanent label chip (pure CSS, moves with the pin) */
+        const el = document.createElement('div');
+        el.className = 'rv-marker';
+        el.setAttribute('role', 'img');
+        el.setAttribute('aria-label', 'Revamp Auto Car Wash — 89 Stormberg Avenue, Bosmont');
+        el.innerHTML =
+          '<span class="rv-pin">' +
+          '<i class="rv-pin-pulse" aria-hidden="true"></i>' +
+          `<svg viewBox="0 0 24 20" aria-hidden="true"><path d="${CROWN_PATH}"/></svg>` +
+          '</span>' +
+          '<b class="rv-tag" aria-hidden="true">Revamp Auto Car Wash</b>';
+        new maplibregl.Marker({ element: el, anchor: 'center' })
+          .setLngLat([SHOP.lng, SHOP.lat])
+          .addTo(m);
 
-        const icon = L.divIcon({
-          className: '',
-          iconSize: [38, 38],
-          iconAnchor: [19, 19],
-          html:
-            '<span class="rv-pin">' +
-            '<i class="rv-pin-pulse" aria-hidden="true"></i>' +
-            `<svg viewBox="0 0 24 20" aria-hidden="true"><path d="${CROWN_PATH}"/></svg>` +
-            '</span>',
-        });
-        const marker = L.marker([SHOP.lat, SHOP.lng], {
-          icon,
-          keyboard: true,
-          title: 'Revamp Auto Car Wash',
-          alt: 'Revamp Auto Car Wash — 89 Stormberg Avenue, Bosmont',
-        }).addTo(map);
-        const labelSide = window.matchMedia('(max-width: 860px)').matches ? 'top' : 'right';
-        marker.bindTooltip('Revamp Auto Car Wash', {
-          permanent: true,
-          direction: labelSide,
-          offset: labelSide === 'top' ? [0, -16] : [18, 0],
-          className: 'rv-tip',
-        });
-
-        const unlockZoom = () => {
-          map?.scrollWheelZoom.enable();
+        /* wheel-zoom unlock flow: click to zoom (Lenis keeps the page scrolling
+           before that; data-lenis-prevent is toggled alongside zoom) */
+        const unlock = () => {
+          m.scrollZoom.enable();
           shell.classList.add('zoom-on');
+          shell.setAttribute('data-lenis-prevent', '');
         };
-        map.on('click', unlockZoom);
-        canvas.addEventListener('mouseleave', () => map?.scrollWheelZoom.disable());
+        const lock = () => {
+          m.scrollZoom.disable();
+          shell.classList.remove('zoom-on');
+          shell.removeAttribute('data-lenis-prevent');
+        };
+        m.on('click', unlock);
+        m.getCanvasContainer().addEventListener('mouseleave', lock);
 
-        ro = new ResizeObserver(() => map?.invalidateSize());
+        m.on('load', () => {
+          if (!cancelled) shell.classList.add('map-ready');
+        });
+        safety = window.setTimeout(() => shell.classList.add('map-ready'), 6000);
+
+        ro = new ResizeObserver(() => {
+          if (!cancelled) m.resize();
+        });
         ro.observe(canvas);
-        shell.classList.add('map-ready');
       } catch {
         shell.classList.add('map-offline');
       }
@@ -215,6 +420,7 @@ export default function LiveMapPanel() {
 
     return () => {
       cancelled = true;
+      window.clearTimeout(safety);
       io?.disconnect();
       ro?.disconnect();
       map?.remove();
@@ -228,7 +434,7 @@ export default function LiveMapPanel() {
   return (
     <div className="book-map">
       {/* ---------- MAP SHELL ---------- */}
-      <div className="map-shell fade-up" ref={shellRef} data-lenis-prevent>
+      <div className="map-shell fade-up" ref={shellRef}>
         <div
           className="map-canvas"
           ref={canvasRef}
