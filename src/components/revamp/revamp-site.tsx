@@ -249,6 +249,7 @@ export default function RevampSite() {
 
       const setMenu = (open: boolean) => {
         document.body.classList.toggle('menu-open', open);
+        document.documentElement.classList.toggle('menu-open', open);
         burger?.setAttribute('aria-expanded', String(open));
         menu?.setAttribute('aria-hidden', String(!open));
         if (lenis) {
@@ -275,6 +276,14 @@ export default function RevampSite() {
       const closeMenu = () => setMenu(false);
       menuLinks.forEach((a) => a.addEventListener('click', closeMenu));
       cleanups.push(() => menuLinks.forEach((a) => a.removeEventListener('click', closeMenu)));
+
+      /* close the menu if the viewport grows past the mobile breakpoint */
+      const mqDesktop = window.matchMedia('(min-width: 861px)');
+      const onMqChange = (e: MediaQueryListEvent) => {
+        if (e.matches && document.body.classList.contains('menu-open')) setMenu(false);
+      };
+      mqDesktop.addEventListener('change', onMqChange);
+      cleanups.push(() => mqDesktop.removeEventListener('change', onMqChange));
 
       /* Escape closes the menu and hands focus back to the burger */
       const onKey = (e: KeyboardEvent) => {
@@ -518,6 +527,46 @@ export default function RevampSite() {
         });
       }
 
+      /* ---------- marquee reacts to scroll velocity (subtle inertia skew) ---------- */
+      function buildMarqueeJuice() {
+        if (reduced) return;
+        const mq = document.querySelector<HTMLElement>('.marquee');
+        if (!mq) return;
+        const skewTo = gsap.quickTo(mq, 'skewX', { duration: 0.6, ease: 'power3.out' });
+        ScrollTrigger.create({
+          start: 0,
+          end: 'max',
+          onUpdate(self) {
+            skewTo(gsap.utils.clamp(-2.2, 2.2, self.getVelocity() / -380));
+          },
+        });
+      }
+
+      /* ---------- magnetic gold CTAs (fine pointers only) ---------- */
+      function buildMagnetics() {
+        if (reduced) return;
+        if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+        root.querySelectorAll<HTMLElement>('.btn-gold').forEach((btn) => {
+          const xTo = gsap.quickTo(btn, 'x', { duration: 0.45, ease: 'power3.out' });
+          const yTo = gsap.quickTo(btn, 'y', { duration: 0.45, ease: 'power3.out' });
+          const onMove = (e: MouseEvent) => {
+            const r = btn.getBoundingClientRect();
+            xTo((e.clientX - (r.left + r.width / 2)) * 0.16);
+            yTo((e.clientY - (r.top + r.height / 2)) * 0.22);
+          };
+          const onLeave = () => {
+            xTo(0);
+            yTo(0);
+          };
+          btn.addEventListener('mousemove', onMove);
+          btn.addEventListener('mouseleave', onLeave);
+          cleanups.push(() => {
+            btn.removeEventListener('mousemove', onMove);
+            btn.removeEventListener('mouseleave', onLeave);
+          });
+        });
+      }
+
       /* ---------- splash + hero intro ---------- */
 
       const heroIntro = () => {
@@ -537,55 +586,99 @@ export default function RevampSite() {
         const panel = wrap?.querySelector<HTMLElement>('.loader-panel');
         const accent = wrap?.querySelector<HTMLElement>('.loader-accent');
         const barFill = wrap?.querySelector<HTMLElement>('.loader-bar i');
+        if (!wrap || !panel || !accent) return;
 
-        /* intro: crown draws → wordmark rises → tagline settles → bar tracks */
-        gsap
-          .timeline()
-          .to('.loader-crown path', { strokeDashoffset: 0, duration: 0.85, ease: 'power2.inOut' }, 0.05)
-          .fromTo(
-            '.loader-glow',
-            { opacity: 0, scale: 0.72 },
-            { opacity: 1, scale: 1, duration: 1.2, ease: 'power2.out' },
-            0.05
-          )
-          .to('.loader-word .lw', { y: 0, duration: 0.95, stagger: 0.055, ease: 'power4.out' }, 0.34)
-          .fromTo(
-            '.loader-tag',
-            { opacity: 0, y: 10 },
-            { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' },
-            0.72
-          )
-          .to(barFill, { scaleX: 0.78, duration: 1.3, ease: 'power2.inOut' }, 0.4)
-          .fromTo(
-            '.loader-credit',
-            { opacity: 0, y: 14 },
-            { opacity: 1, y: 0, duration: 0.65, ease: 'power3.out' },
-            0.95
-          );
+        let repeat = false;
+        try {
+          repeat = sessionStorage.getItem('rv-seen') === '1';
+        } catch {
+          /* private mode — treat as first visit */
+        }
 
-        /* exit once fonts are ready (min hold for rhythm, 3.2s safety net) */
-        const fontsSafe = Promise.race([fontsReady, wait(3200)]);
-        Promise.all([fontsSafe, wait(1500)]).then(() => {
+        const startExit = (fast: boolean) => {
           if (!alive) return;
+          try {
+            sessionStorage.setItem('rv-seen', '1');
+          } catch {
+            /* ignore */
+          }
           exitTl = gsap
             .timeline({
               onComplete() {
-                if (wrap) wrap.style.display = 'none';
+                wrap.style.display = 'none';
               },
             })
-            .to(barFill, { scaleX: 1, duration: 0.3, ease: 'power2.in' })
+            .to(barFill, { scaleX: 1, duration: fast ? 0.18 : 0.3, ease: 'power2.in' })
             .to(
               '.loader-inner, .loader-credit',
-              { opacity: 0, y: -26, filter: 'blur(6px)', duration: 0.4, ease: 'power2.in' },
+              {
+                opacity: 0,
+                y: fast ? -18 : -26,
+                filter: 'blur(6px)',
+                duration: fast ? 0.3 : 0.4,
+                ease: 'power2.in',
+              },
               '+=0.05'
             )
             .add(() => {
               document.body.classList.remove('loading');
             })
-            .to(panel, { yPercent: -100, duration: 0.85, ease: 'power4.inOut' }, '-=0.08')
-            .to(accent, { yPercent: -100, duration: 0.85, ease: 'power4.inOut' }, '<0.14')
+            .to(panel, { yPercent: -100, duration: fast ? 0.7 : 0.85, ease: 'power4.inOut' }, '-=0.08')
+            .to(accent, { yPercent: -100, duration: fast ? 0.7 : 0.85, ease: 'power4.inOut' }, '<0.14')
             .add(heroIntro, '<0.4');
-        });
+        };
+
+        /* repeat visit this session: skip the theatre, keep a quick branded beat */
+        if (repeat) {
+          gsap.set('.loader-crown path', { strokeDashoffset: 0 });
+          gsap.set('.loader-glow', { opacity: 1, scale: 1 });
+          gsap.set('.loader-word .lw', { y: 0 });
+          gsap.set('.loader-tag, .loader-credit', { opacity: 1, y: 0 });
+          gsap.set(barFill, { scaleX: 1 });
+          Promise.all([Promise.race([fontsReady, wait(1300)]), wait(500)]).then(() => startExit(true));
+          return;
+        }
+
+        /* first visit: crown draws → wordmark rises → shimmer sweep → bar tracks */
+        gsap
+          .timeline()
+          .to('.loader-crown path', { strokeDashoffset: 0, duration: 0.75, ease: 'power2.inOut' }, 0.05)
+          .fromTo(
+            '.loader-glow',
+            { opacity: 0, scale: 0.72 },
+            { opacity: 1, scale: 1, duration: 1.1, ease: 'power2.out' },
+            0.05
+          )
+          .to('.loader-word .lw', { y: 0, duration: 0.9, stagger: 0.05, ease: 'power4.out' }, 0.3)
+          .to(
+            '.loader-shine',
+            {
+              opacity: 1,
+              xPercent: 460,
+              duration: 0.9,
+              ease: 'power2.inOut',
+              onComplete() {
+                gsap.set('.loader-shine', { opacity: 0 });
+              },
+            },
+            0.75
+          )
+          .fromTo(
+            '.loader-tag',
+            { opacity: 0, y: 10 },
+            { opacity: 1, y: 0, duration: 0.65, ease: 'power3.out' },
+            0.72
+          )
+          .to(barFill, { scaleX: 0.78, duration: 1.2, ease: 'power2.inOut' }, 0.35)
+          .fromTo(
+            '.loader-credit',
+            { opacity: 0, y: 14 },
+            { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' },
+            0.9
+          );
+
+        /* exit once fonts are ready (min hold for rhythm, 3.2s safety net) */
+        Promise.all([Promise.race([fontsReady, wait(3200)]), wait(1250)]).then(() => startExit(false));
       };
 
       /* ---------- boot ---------- */
@@ -609,6 +702,8 @@ export default function RevampSite() {
       } else {
         buildScrollReveals();
         buildParallax();
+        buildMarqueeJuice();
+        buildMagnetics();
         runLoader();
       }
 
@@ -632,6 +727,7 @@ export default function RevampSite() {
       window.lenis = undefined;
       ctx.revert();
       document.body.classList.remove('menu-open');
+      document.documentElement.classList.remove('menu-open');
     };
   }, []);
 
@@ -652,6 +748,7 @@ export default function RevampSite() {
                   <span className="lw">{ch}</span>
                 </span>
               ))}
+              <span className="loader-shine" aria-hidden="true" />
             </div>
             <div className="loader-tag">
               <span>Auto Car Wash — Bosmont, JHB</span>
@@ -707,7 +804,7 @@ export default function RevampSite() {
             data-hover
             href={WHATSAPP_BOOK}
             target="_blank"
-            rel="noopener"
+            rel="noopener noreferrer"
           >
             <WhatsAppIcon />
             <span>Book a wash</span>
@@ -751,7 +848,7 @@ export default function RevampSite() {
             data-hover
             href={WHATSAPP_BOOK}
             target="_blank"
-            rel="noopener"
+            rel="noopener noreferrer"
           >
             <WhatsAppIcon />
             <span>WhatsApp us</span>
@@ -770,11 +867,14 @@ export default function RevampSite() {
         {/* ============ HERO ============ */}
         <section className="hero" id="hero">
           <div className="hero-media">
-            <img
-              src="/images/hero.webp"
-              alt="Glossy black BMW gleaming under golden light on the wet floor of Revamp Auto Car Wash"
-              fetchPriority="high"
-            />
+            <picture>
+              <source media="(max-width: 700px)" srcSet="/images/hero-mob.webp" type="image/webp" />
+              <img
+                src="/images/hero.webp"
+                alt="Glossy black BMW gleaming under golden light on the wet floor of Revamp Auto Car Wash"
+                fetchPriority="high"
+              />
+            </picture>
           </div>
           <div className="hero-shade" aria-hidden="true" />
           <div className="hero-content container">
@@ -799,7 +899,7 @@ export default function RevampSite() {
                   data-hover
                   href={WHATSAPP_BOOK}
                   target="_blank"
-                  rel="noopener"
+                  rel="noopener noreferrer"
                 >
                   <span>Book on WhatsApp</span>
                   <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
@@ -899,7 +999,7 @@ export default function RevampSite() {
                   data-hover
                   href={WHATSAPP_HALF}
                   target="_blank"
-                  rel="noopener"
+                  rel="noopener noreferrer"
                 >
                   <span>Book Half House</span>
                   <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
@@ -930,7 +1030,7 @@ export default function RevampSite() {
                   data-hover
                   href={WHATSAPP_FULL}
                   target="_blank"
-                  rel="noopener"
+                  rel="noopener noreferrer"
                 >
                   <span>Book Full House</span>
                   <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
@@ -1078,7 +1178,7 @@ export default function RevampSite() {
                 data-hover
                 href={WHATSAPP_BOOK}
                 target="_blank"
-                rel="noopener"
+                rel="noopener noreferrer"
               >
                 <span>WhatsApp us</span>
                 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
@@ -1090,7 +1190,7 @@ export default function RevampSite() {
                 data-hover
                 href={MAPS_URL}
                 target="_blank"
-                rel="noopener"
+                rel="noopener noreferrer"
               >
                 <PinIcon />
                 <span>Get directions</span>
@@ -1117,12 +1217,12 @@ export default function RevampSite() {
                 </h4>
                 <p>
                   <a href="tel:+27763026570">+27 76 302 6570</a> ·{' '}
-                  <a href="https://wa.me/27763026570" target="_blank" rel="noopener">
+                  <a href="https://wa.me/27763026570" target="_blank" rel="noopener noreferrer">
                     WhatsApp
                   </a>
                   <br />
                   <a href="tel:+27750378818">+27 75 037 8818</a> ·{' '}
-                  <a href="https://wa.me/27750378818" target="_blank" rel="noopener">
+                  <a href="https://wa.me/27750378818" target="_blank" rel="noopener noreferrer">
                     WhatsApp
                   </a>
                 </p>

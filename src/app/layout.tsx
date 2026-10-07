@@ -90,7 +90,8 @@ export default function RootLayout({
         <link rel="preload" href="/fonts/space-grotesk-400.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/space-grotesk-500.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/space-grotesk-700.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
-        <link rel="preload" href="/images/hero.webp" as="image" fetchPriority="high" />
+        <link rel="preload" href="/images/hero.webp" as="image" fetchPriority="high" media="(min-width: 701px)" />
+        <link rel="preload" href="/images/hero-mob.webp" as="image" fetchPriority="high" media="(max-width: 700px)" />
       </head>
       <body className="loading">
         <noscript>
