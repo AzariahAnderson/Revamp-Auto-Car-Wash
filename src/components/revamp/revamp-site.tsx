@@ -10,6 +10,7 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
+import LiveMapPanel from './revamp-map';
 
 declare global {
   interface Window {
@@ -85,14 +86,6 @@ const PinIcon = () => (
 const PhoneIcon = () => (
   <svg {...iconProps}>
     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92Z" />
-  </svg>
-);
-
-const InfoIcon = () => (
-  <svg {...iconProps}>
-    <circle cx="12" cy="12" r="10" />
-    <path d="M12 16v-4" />
-    <path d="M12 8h.01" />
   </svg>
 );
 
@@ -343,21 +336,6 @@ export default function RevampSite() {
         });
       });
 
-      /* ---------- cursor spotlight on cards (visual gated by @media (hover:hover)) ---------- */
-      {
-        const spots = Array.from(root.querySelectorAll<HTMLElement>('.card, .strip'));
-        const onSpot = (e: MouseEvent) => {
-          const el = e.currentTarget as HTMLElement;
-          const r = el.getBoundingClientRect();
-          el.style.setProperty('--mx', `${e.clientX - r.left}px`);
-          el.style.setProperty('--my', `${e.clientY - r.top}px`);
-        };
-        spots.forEach((el) => {
-          el.addEventListener('mousemove', onSpot, { passive: true });
-          cleanups.push(() => el.removeEventListener('mousemove', onSpot));
-        });
-      }
-
       /* ---------- reveal builders ---------- */
       function buildScrollReveals() {
         gsap.set('.line-in', { y: '112%', rotate: 2.4 });
@@ -404,15 +382,6 @@ export default function RevampSite() {
           once: true,
           onEnter(batch) {
             gsap.to(batch, { y: 0, opacity: 1, duration: 1, stagger: 0.12, ease: 'power3.out' });
-          },
-        });
-
-        gsap.set('.book-grid > div', { y: 30, opacity: 0 });
-        ScrollTrigger.batch('.book-grid > div', {
-          start: 'top 92%',
-          once: true,
-          onEnter(batch) {
-            gsap.to(batch, { y: 0, opacity: 1, duration: 0.95, stagger: 0.11, ease: 'power3.out' });
           },
         });
 
@@ -479,11 +448,6 @@ export default function RevampSite() {
       /* ---------- parallax (device aware) ---------- */
       function buildParallax() {
         gsap.fromTo(
-          '.hero-media img',
-          { scale: 1.22 },
-          { scale: 1.06, duration: 2.6, ease: 'power3.out', delay: 0.15 }
-        );
-        gsap.fromTo(
           '.book-crown',
           { yPercent: 26, rotate: 4 },
           {
@@ -496,11 +460,6 @@ export default function RevampSite() {
 
         const mm = gsap.matchMedia();
         mm.add('(min-width: 861px)', () => {
-          gsap.to('.hero-media img', {
-            yPercent: 16,
-            ease: 'none',
-            scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true },
-          });
           gsap.to('.hero-content', {
             yPercent: -14,
             opacity: 0.25,
@@ -516,13 +475,6 @@ export default function RevampSite() {
               end: 'bottom top',
               scrub: true,
             },
-          });
-        });
-        mm.add('(max-width: 860px)', () => {
-          gsap.to('.hero-media img', {
-            yPercent: 7,
-            ease: 'none',
-            scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true },
           });
         });
       }
@@ -631,7 +583,6 @@ export default function RevampSite() {
         /* repeat visit this session: skip the theatre, keep a quick branded beat */
         if (repeat) {
           gsap.set('.loader-crown path', { strokeDashoffset: 0 });
-          gsap.set('.loader-glow', { opacity: 1, scale: 1 });
           gsap.set('.loader-word .lw', { y: 0 });
           gsap.set('.loader-tag, .loader-credit', { opacity: 1, y: 0 });
           gsap.set(barFill, { scaleX: 1 });
@@ -643,26 +594,7 @@ export default function RevampSite() {
         gsap
           .timeline()
           .to('.loader-crown path', { strokeDashoffset: 0, duration: 0.75, ease: 'power2.inOut' }, 0.05)
-          .fromTo(
-            '.loader-glow',
-            { opacity: 0, scale: 0.72 },
-            { opacity: 1, scale: 1, duration: 1.1, ease: 'power2.out' },
-            0.05
-          )
           .to('.loader-word .lw', { y: 0, duration: 0.9, stagger: 0.05, ease: 'power4.out' }, 0.3)
-          .to(
-            '.loader-shine',
-            {
-              opacity: 1,
-              xPercent: 460,
-              duration: 0.9,
-              ease: 'power2.inOut',
-              onComplete() {
-                gsap.set('.loader-shine', { opacity: 0 });
-              },
-            },
-            0.75
-          )
           .fromTo(
             '.loader-tag',
             { opacity: 0, y: 10 },
@@ -687,12 +619,11 @@ export default function RevampSite() {
         const loaderEl = document.getElementById('loader');
         if (loaderEl) loaderEl.style.display = 'none';
         gsap.set('.line-in, .wi', { y: 0, rotate: 0 });
-        gsap.set('.fade-up, .card, .t-row, .step, .book-grid > div', {
+        gsap.set('.fade-up, .card, .t-row, .step', {
           opacity: 1,
           y: 0,
         });
         gsap.set('.card .badge', { scale: 1, rotate: 0 });
-        gsap.set('.hero-media img', { scale: 1 });
         const fgFill = document.querySelector<HTMLElement>('.fg-fill');
         if (fgFill) fgFill.style.clipPath = 'inset(0 0 0% 0)';
         root.querySelectorAll<HTMLElement>('[data-count]').forEach((el) => {
@@ -738,7 +669,6 @@ export default function RevampSite() {
         <div className="loader-accent" />
         <div className="loader-panel">
           <div className="loader-inner">
-            <span className="loader-glow" />
             <svg className="loader-crown" viewBox="0 0 24 20">
               <path d={CROWN_PATH} />
             </svg>
@@ -748,7 +678,6 @@ export default function RevampSite() {
                   <span className="lw">{ch}</span>
                 </span>
               ))}
-              <span className="loader-shine" aria-hidden="true" />
             </div>
             <div className="loader-tag">
               <span>Auto Car Wash — Bosmont, JHB</span>
@@ -866,17 +795,9 @@ export default function RevampSite() {
       <main id="top">
         {/* ============ HERO ============ */}
         <section className="hero" id="hero">
-          <div className="hero-media">
-            <picture>
-              <source media="(max-width: 700px)" srcSet="/images/hero-mob.webp" type="image/webp" />
-              <img
-                src="/images/hero.webp"
-                alt="Glossy black BMW gleaming under golden light on the wet floor of Revamp Auto Car Wash"
-                fetchPriority="high"
-              />
-            </picture>
-          </div>
-          <div className="hero-shade" aria-hidden="true" />
+          <svg className="hero-crown" viewBox="0 0 24 20" aria-hidden="true">
+            <path d={CROWN_PATH} />
+          </svg>
           <div className="hero-content container">
             <h1 className="hero-title">
               <span className="line">
@@ -1196,49 +1117,10 @@ export default function RevampSite() {
                 <span>Get directions</span>
               </a>
             </div>
-            <div className="book-grid">
-              <div>
-                <h4>
-                  <PinIcon />
-                  Find us
-                </h4>
-                <p>
-                  89 Stormberg Avenue
-                  <br />
-                  Bosmont, Johannesburg
-                  <br />
-                  Gauteng, South Africa
-                </p>
-              </div>
-              <div>
-                <h4>
-                  <PhoneIcon />
-                  Call / WhatsApp
-                </h4>
-                <p>
-                  <a href="tel:+27763026570">+27 76 302 6570</a> ·{' '}
-                  <a href="https://wa.me/27763026570" target="_blank" rel="noopener noreferrer">
-                    WhatsApp
-                  </a>
-                  <br />
-                  <a href="tel:+27750378818">+27 75 037 8818</a> ·{' '}
-                  <a href="https://wa.me/27750378818" target="_blank" rel="noopener noreferrer">
-                    WhatsApp
-                  </a>
-                </p>
-              </div>
-              <div>
-                <h4>
-                  <InfoIcon />
-                  Good to know
-                </h4>
-                <p>
-                  Walk-ins welcome.
-                  <br />
-                  Book ahead on WhatsApp to skip the queue.
-                </p>
-              </div>
-            </div>
+            <LiveMapPanel />
+            <p className="book-note fade-up">
+              Walk-ins welcome — book ahead on WhatsApp to skip the queue.
+            </p>
           </div>
         </section>
       </main>

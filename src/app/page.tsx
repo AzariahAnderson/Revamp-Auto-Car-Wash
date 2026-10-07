@@ -1,5 +1,8 @@
 import RevampSite from "@/components/revamp/revamp-site";
 
+const MAPS_URL =
+  "https://www.google.com/maps/search/?api=1&query=89+Stormberg+Avenue+Bosmont+Johannesburg";
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "AutoWash",
@@ -14,6 +17,32 @@ const jsonLd = {
     addressRegion: "Gauteng",
     addressCountry: "ZA",
   },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: -26.18905,
+    longitude: 27.95321,
+  },
+  hasMap: MAPS_URL,
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      opens: "08:00",
+      closes: "17:00",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: "Saturday",
+      opens: "08:00",
+      closes: "15:00",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: "Sunday",
+      opens: "08:00",
+      closes: "13:00",
+    },
+  ],
   makesOffer: [
     {
       "@type": "Offer",
